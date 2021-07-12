@@ -8,21 +8,22 @@
 <body>
 <h2>Update user</h2>
 <br>
-<form th:method="POST" th:action="@{/users/{id}/edit(id=${getUserById.id})}" th:object="${getUserById}">
-    <label for="name">Enter name:     </label>
-    <input type="text" th:field="*{firstName}" id="name"/>
+<form th:method="POST" th:action="@{/admin/{id}/edit(id=${getUserById.id})}" th:object="${getUserById}">
+    <label for="name">Enter username:     </label>
+    <input type="text" th:field="*{username}" id="name"/>
     <br/>
-    <label for="lastname">Enter last name: </label>
-    <input type="text" th:field="*{lastName}" id="lastname"/>
+    <label for="lastname">Enter password: </label>
+    <input type="text" th:field="*{password}" id="lastname"/>
     <br/>
-    <label for="email">Enter Email:     </label>
-    <input type="text" th:field="*{email}" id="email"/>
+    <label for="email">Enter roles:     </label>
+    <input type="text" th:field="*{roles}" id="email"/>
     <br/>
     <input type="submit" value="Обновить!"/>
 </form>
 
 
-<p><a th:href="@{/users/}"> Users Page </a></p>
-
+<p><a th:href="@{/admin/}"> Admin Page </a></p>
+<br>
+<a th:href="@{/logout}">Logout</a>
 </body>
 </html>
