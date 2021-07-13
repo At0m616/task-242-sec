@@ -8,16 +8,19 @@
 <body>
 <h2>Update user</h2>
 <br>
-<form th:method="POST" th:action="@{/admin/{id}/edit(id=${getUserById.id})}" th:object="${getUserById}">
+<form th:method="PATCH" th:action="@{/admin/{id}/edit(id=${getUserById.id})}" th:object="${getUserById}">
     <label for="name">Enter username:     </label>
     <input type="text" th:field="*{username}" id="name"/>
-    <br/>
-    <label for="lastname">Enter password: </label>
-    <input type="text" th:field="*{password}" id="lastname"/>
-    <br/>
-    <label for="email">Enter roles:     </label>
-    <input type="text" th:field="*{roles}" id="email"/>
-    <br/>
+    <br>
+    <label for="password">Enter password: </label>
+    <input type="password" th:field="*{password}" id="password"/>
+    <br>
+    <select id="editRoles" name="roles" multiple size="2" required
+            class="form-control form-control-sm">
+        <option value="1" >ADMIN</option>
+        <option value="2" >USER</option>
+    </select>
+    <br>
     <input type="submit" value="Обновить!"/>
 </form>
 

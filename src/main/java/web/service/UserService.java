@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Service
 public interface UserService {
-    void addUser(User user);
+    boolean addUser(User user);
 
     User getUserById(long id);
 

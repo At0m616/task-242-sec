@@ -11,45 +11,21 @@
 <form th:method="POST" th:action="@{/registration}" th:object="${user}">
     <label for="username" >Enter username: </label>
     <br>
-    <input type="text" placeholder="Username" th:field="*{username}" id="username"/>
-    <div style="color:darkred" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</div>
+    <input type="text" placeholder="Username" th:field="*{username}" id="username" required/>
+    <h3 th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</h3>
     <br>
     <label for="password">Enter password: </label>
     <br>
-    <input type="password" placeholder="Password" th:field="*{password}" id="password"/>
+    <input type="password" placeholder="Password" th:field="*{password}" id="password" required/>
     <div style="color:darkred" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
-    <br>
-<!--    <div class="form-group row">-->
-<!--        <label class="col-form-label col-sm-4">Roles:</label>-->
-<!--        <div class="col-sm-8 text-left">-->
-<!--            <th:block th:each = "role : ${roles}">-->
-<!--                <div>-->
-<!--                    <input type="checkbox" th:field="*{roles}" th:text="${role.name}"-->
-<!--                           th:value ="${role.id}" class="m-2"/>-->
-<!--                </div></th:block></div></div>-->
-    <select id="editRoles" name="roles" multiple size="2" required
-    class="form-control form-control-sm">
-    <option value="1"   adminSelect   >ADMIN</option>
-    <option value="2"   userSelect   >USER</option>
-    </select>
-    <br>
-<!--    <label for="roleAdmin">Role Admin: </label>-->
+    <br><br>
 
-<!--    <label for="roleAdmin">Role Admin: </label>-->
-<!--    <br>-->
-<!--    <input type=checkbox th:field="*{roles}" value="ROLE_ADMIN" id="roleAdmin"/>-->
-<!--    <br>-->
-<!--    <input type=checkbox id=adminId name=roles[] value="ROLE_ADMIN">-->
-<!--    <label for="adminId">Админ</label>-->
-<!--    <br>-->
-<!--    <input type=checkbox id=userId name=roles[] value="ROLE_USER">-->
-<!--    <label for="userId">User</label>-->
-<!--    <div>-->
-<!--        <label>Role Admin</label>-->
-<!--        <input type="checkbox" value="ADMIN" name="admin">-->
-<!--        <label>Role User</label>-->
-<!--        <input type="checkbox" value="USER" name="user">-->
-<!--    </div>-->
+    <select id="editRoles" name="roles" multiple size="2" required
+            class="form-control form-control-sm">
+        <option value="1" >ADMIN</option>
+        <option value="2" >USER</option>
+    </select>
+    <br><br>
 
     <input type="submit" value="Create!"/>
 </form>

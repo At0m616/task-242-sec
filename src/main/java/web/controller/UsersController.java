@@ -1,27 +1,23 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import web.dao.RoleDao;
 import web.model.Role;
 import web.model.User;
 import web.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 
 @Controller
-//@RequestMapping("/users")
 public class UsersController {
     private final UserService userService;
-
 
     @Autowired
     public UsersController(UserService userService) {
@@ -31,12 +27,6 @@ public class UsersController {
     @GetMapping("/")
     public String index() {
         return "index";
-    }
-
-    @GetMapping("/admin")
-    public String getAllUsers(Model model) {
-        model.addAttribute("listU", userService.getAllUsers());
-        return "admin-page";
     }
 
     @GetMapping("login")
@@ -58,7 +48,7 @@ public class UsersController {
     }
 
     @PostMapping("/registration")
-    public String createNewUser(@ModelAttribute("user") User userForm,
+    public String createNewUser(@ModelAttribute("user") @Valid User userForm,
                                 @RequestParam(required = false, name = "roles") Long[] role,
                                 BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -71,8 +61,12 @@ public class UsersController {
         return "redirect:/";
     }
 
-
-    @GetMapping("/admin/{id}/delete")
+    @GetMapping("/admin")
+    public String getAllUsers(Model model) {
+        model.addAttribute("listU", userService.getAllUsers());
+        return "admin-page";
+    }
+    @DeleteMapping ("/admin/{id}/delete")
     public String removeUser(@PathVariable("id") int id) {
         userService.removeUser(id);
         return "redirect:/admin";
@@ -81,11 +75,19 @@ public class UsersController {
     @GetMapping("/admin/{id}/edit")
     public String editUser(@PathVariable("id") int id, Model model) {
         model.addAttribute("getUserById", userService.getUserById(id));
+        model.addAttribute("roles", userService.getAllRoles());
         return "edit";
     }
 
-    @PostMapping("/admin/{id}/edit")
-    public String updateUser(@ModelAttribute("user") User user, @PathVariable("id") int id) {
+    @PatchMapping("/admin/{id}/edit")
+    public String updateUser(@ModelAttribute("user") @Valid User user,
+                             @RequestParam(required = false, name = "roles") Long[] roles,
+                             BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "redirect:/admin";
+        }
+        Set<Role> roleSet = userService.findRolesSetById(roles);
+        user.setRoles(roleSet);
         userService.updateUser(user);
         return "redirect:/admin";
     }

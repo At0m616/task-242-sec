@@ -1,12 +1,10 @@
 package web.model;
 
-import org.hibernate.validator.constraints.UniqueElements;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 import java.util.Collection;
@@ -27,7 +25,7 @@ public class User implements UserDetails {
     private String username;
 
     @Column(name = "password")
-    @Size(min = 8, message = "Минимум 8 символов")
+    @Size(min = 3, message = "Минимум 3 символа")
     @NotBlank(message = "password not empty")
     private String password;
 
@@ -81,9 +79,6 @@ public class User implements UserDetails {
         return roles;
     }
 
-//    public void setRoles(Role roles) {
-//        this.roles = new HashSet<>();
-//    }
     public void setRoles(Set<Role> roles) {
         this.roles = roles;
     }
