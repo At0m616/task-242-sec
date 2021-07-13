@@ -12,6 +12,7 @@ import web.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 
@@ -61,36 +62,7 @@ public class UsersController {
         return "redirect:/";
     }
 
-    @GetMapping("/admin")
-    public String getAllUsers(Model model) {
-        model.addAttribute("listU", userService.getAllUsers());
-        return "admin-page";
-    }
-    @DeleteMapping ("/admin/{id}/delete")
-    public String removeUser(@PathVariable("id") int id) {
-        userService.removeUser(id);
-        return "redirect:/admin";
-    }
 
-    @GetMapping("/admin/{id}/edit")
-    public String editUser(@PathVariable("id") int id, Model model) {
-        model.addAttribute("getUserById", userService.getUserById(id));
-        model.addAttribute("roles", userService.getAllRoles());
-        return "edit";
-    }
-
-    @PatchMapping("/admin/{id}/edit")
-    public String updateUser(@ModelAttribute("user") @Valid User user,
-                             @RequestParam(required = false, name = "roles") Long[] roles,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin";
-        }
-        Set<Role> roleSet = userService.findRolesSetById(roles);
-        user.setRoles(roleSet);
-        userService.updateUser(user);
-        return "redirect:/admin";
-    }
 
     @GetMapping("/userInfo")
     public String userData(Principal principal, Model model) {

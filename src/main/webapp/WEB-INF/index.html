@@ -9,11 +9,11 @@
 <br>
 
 <div>
-    <a th:href="@{/userInfo}">Users Page</a>
-    <br>
     <a th:href="@{/login}">Login</a>
     <br>
     <a th:href="@{/registration}">Registration</a>
+    <br>
+    <a th:href="@{/userInfo}">Users Page</a>
     <br>
     <sec:authorize access="hasRole('ROLE_ADMIN')">
     <a th:href="@{/admin}">Admin Page</a>
