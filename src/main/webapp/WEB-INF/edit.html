@@ -15,11 +15,12 @@
     <label for="password">Enter password: </label>
     <input type="password" th:field="*{password}" id="password"/>
     <br>
-    <select id="editRoles" name="roles" multiple size="2" required
-            class="form-control form-control-sm">
-        <option value="1" >ADMIN</option>
-        <option value="2" >USER</option>
-    </select>
+    <label>Enter role: </label>
+    <br>
+    <input type=checkbox id=adminId name=roles value="1">
+    <label for="adminId">Admin</label>
+    <input type=checkbox id=userId name=roles value="2">
+    <label for="userId">User</label>
     <br>
     <input type="submit" value="Обновить!"/>
 </form>

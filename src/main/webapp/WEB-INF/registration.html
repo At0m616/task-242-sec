@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
-<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>New user</title>
@@ -18,13 +17,13 @@
     <br>
     <input type="password" placeholder="Password" th:field="*{password}" id="password" required/>
     <div style="color:darkred" th:if="${#fields.hasErrors('password')}" th:errors="*{password}">password error</div>
-    <br><br>
-
-    <select id="editRoles" name="roles" multiple size="2" required
-            class="form-control form-control-sm">
-        <option value="1" >ADMIN</option>
-        <option value="2" >USER</option>
-    </select>
+    <br>
+    <label>Enter role: </label>
+    <br>
+    <input type=checkbox id=adminId name=roles value="1">
+    <label for="adminId">Admin</label>
+    <input type=checkbox id=userId name=roles value="2">
+    <label for="userId">User</label>
     <br><br>
 
     <input type="submit" value="Create!"/>

@@ -38,10 +38,6 @@ public class User implements UserDetails {
     public User() {
     }
 
-    public User(String firstName, String password) {
-        this.username = firstName;
-        this.password = password;
-    }
 
     public User(String username, String password, Set<Role> roles) {
         this.username = username;

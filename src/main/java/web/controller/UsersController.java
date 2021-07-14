@@ -1,7 +1,6 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -12,7 +11,6 @@ import web.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
 import java.util.Set;
 
 
@@ -42,9 +40,7 @@ public class UsersController {
 
     @GetMapping("/registration")
     public String newUser(Model model) {
-        User user = new User();
-        model.addAttribute(user);
-        model.addAttribute("roles", userService.getAllRoles());
+        model.addAttribute("user", new User());
         return "registration";
     }
 
@@ -57,7 +53,6 @@ public class UsersController {
         }
         Set<Role> roleSet = userService.findRolesSetById(role);
         userForm.setRoles(roleSet);
-
         userService.addUser(userForm);
         return "redirect:/";
     }

@@ -29,9 +29,8 @@ public class AdminController {
     }
 
     @GetMapping("/{id}/edit")
-    public String editUser(@PathVariable("id") int id, Model model) {
+    public String editUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("getUserById", userService.getUserById(id));
-        model.addAttribute("roles", userService.getAllRoles());
         return "edit";
     }
 
