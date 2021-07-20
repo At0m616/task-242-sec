@@ -7,9 +7,11 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -17,9 +19,12 @@ import java.util.Set;
 public class AdminController {
     private final UserService userService;
 
+    private final RoleService roleService;
+
     @Autowired
-    public AdminController(UserService userService) {
+    public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
     @GetMapping
@@ -31,6 +36,7 @@ public class AdminController {
     @GetMapping("/{id}/edit")
     public String editUser(@PathVariable("id") Long id, Model model) {
         model.addAttribute("getUserById", userService.getUserById(id));
+        model.addAttribute("listRoles", roleService.getAllRoles());
         return "edit";
     }
 
@@ -41,7 +47,7 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
             return "redirect:/admin";
         }
-        Set<Role> roleSet = userService.findRolesSetById(roles);
+        Set<Role> roleSet = roleService.findRolesSetById(roles);
         user.setRoles(roleSet);
         userService.updateUser(user);
         return "redirect:/admin";

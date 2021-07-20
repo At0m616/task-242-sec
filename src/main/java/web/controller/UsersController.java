@@ -7,6 +7,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
+import web.service.RoleService;
 import web.service.UserService;
 
 import javax.validation.Valid;
@@ -18,24 +19,12 @@ import java.util.Set;
 public class UsersController {
     private final UserService userService;
 
+    private final RoleService roleService;
+
     @Autowired
-    public UsersController(UserService userService) {
+    public UsersController(UserService userService, RoleService roleService) {
         this.userService = userService;
-    }
-
-    @GetMapping("/")
-    public String index() {
-        return "index";
-    }
-
-    @GetMapping("login")
-    public String loginPage() {
-        return "login";
-    }
-
-    @GetMapping("/logout")
-    public String logout() {
-        return "redirect:/";
+        this.roleService = roleService;
     }
 
     @GetMapping("/registration")
@@ -43,7 +32,6 @@ public class UsersController {
         model.addAttribute("user", new User());
         return "registration";
     }
-
     @PostMapping("/registration")
     public String createNewUser(@ModelAttribute("user") @Valid User userForm,
                                 @RequestParam(required = false, name = "roles") Long[] role,
@@ -51,7 +39,7 @@ public class UsersController {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        Set<Role> roleSet = userService.findRolesSetById(role);
+        Set<Role> roleSet = roleService.findRolesSetById(role);
         userForm.setRoles(roleSet);
         userService.addUser(userForm);
         return "redirect:/";

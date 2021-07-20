@@ -84,27 +84,4 @@ public class UserServiceImpl implements UserService {
         return userDao.getAllUsers();
     }
 
-    @Transactional
-    @Override
-    public Role findRolesById(Long id) {
-        return roleDao.findRoleById(id);
-    }
-
-    @Transactional
-    @Override
-    public Role findRoleByName(String name) {
-        return roleDao.findRoleByName(name);
-    }
-
-    @Transactional
-    @Override
-    public List<Role> getAllRoles() {
-        return roleDao.getAllRoles();
-    }
-
-    @Transactional
-    @Override
-    public Set<Role> findRolesSetById(Long[] id) {
-        return roleDao.findRolesSetById(id);
-    }
 }

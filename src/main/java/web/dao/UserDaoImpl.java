@@ -22,7 +22,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserById(long id) {
         TypedQuery<User> query = entityManager
-                .createQuery("select u from User u where u.id = :id", User.class);
+                .createQuery("select distinct u from User u JOIN FETCH u.roles where u.id = :id", User.class);
         query.setParameter("id", id);
         return query.getSingleResult();
     }
@@ -30,7 +30,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public User getUserByName(String name) {
         TypedQuery<User> query = entityManager
-                .createQuery("select u from User u where  u.username =:name", User.class)
+                .createQuery("select distinct u from User u JOIN FETCH u.roles where u.username =:name ", User.class)
                 .setParameter("name", name);
 
         return query.getResultList().stream().findAny().orElse(null);
@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         return entityManager.createQuery
-                ("select u from User u", User.class)
+                ("select distinct u from User u join fetch u.roles", User.class)
                 .getResultList();
     }
 
