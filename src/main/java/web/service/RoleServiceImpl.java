@@ -1,6 +1,6 @@
 package web.service;
 
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import web.dao.RoleDao;
 import web.model.Role;
@@ -8,7 +8,7 @@ import web.model.Role;
 import java.util.List;
 import java.util.Set;
 
-@Repository
+@Service
 public class RoleServiceImpl implements RoleService{
 
     private final RoleDao roleDao;
@@ -41,4 +41,8 @@ public class RoleServiceImpl implements RoleService{
         return roleDao.findRolesSetById(id);
     }
 
+    @Override
+    public Set<Role> findRoleSetByName(String[] names) {
+        return roleDao.findRoleSetByName(names);
+    }
 }

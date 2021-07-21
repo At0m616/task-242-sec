@@ -10,9 +10,11 @@ public interface RoleDao {
 
     Role findRoleById(Long id);
 
+    Set<Role> findRolesSetById(Long[] id);
+
     Role findRoleByName(String name);
 
-    Set<Role> findRolesSetById(Long[] id);
+    Set<Role> findRoleSetByName(String[] names);
 
     List<Role> getAllRoles();
 }

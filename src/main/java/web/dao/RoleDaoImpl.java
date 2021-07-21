@@ -21,6 +21,14 @@ public class RoleDaoImpl implements RoleDao{
     public Role findRoleById(Long id) {
         return entityManager.find(Role.class, id);
     }
+    @Override
+    public Set<Role> findRolesSetById(Long[] id) {
+        Set<Role> roleSet = new HashSet<>();
+        for (Long i : id) {
+            roleSet.add(findRoleById(i));
+        }
+        return roleSet;
+    }
 
     @Override
     public Role findRoleByName(String name) {
@@ -31,10 +39,10 @@ public class RoleDaoImpl implements RoleDao{
     }
 
     @Override
-    public Set<Role> findRolesSetById(Long[] id) {
+    public Set<Role> findRoleSetByName(String[] names) {
         Set<Role> roleSet = new HashSet<>();
-        for (Long i : id) {
-            roleSet.add(findRoleById(i));
+        for (String s : names) {
+            roleSet.add(findRoleByName(s));
         }
         return roleSet;
     }

@@ -9,6 +9,8 @@
 <h2>Update user</h2>
 <br>
 <form th:method="PATCH" th:action="@{/admin/{id}/edit(id=${getUserById.id})}" th:object="${getUserById}">
+    <input type="hidden" th:field="*{id}" readonly="readonly"/>
+    <br>
     <label for="name">Enter username: </label>
     <input type="text" th:field="*{username}" id="name"/>
     <br>
@@ -16,16 +18,13 @@
     <input type="text" th:field="*{password}" id="password"/>
     <br>
     <div>
-        <label>Roles</label>
         <th:block th:each="role : ${listRoles}">
             <div>
-                <input type="checkbox" th:field="*{roles}" th:text="${role.name}" th:value="${role.id}"/>
+                <input type="checkbox" th:value="${role.id}" th:field="*{roles}"
+                       th:text="${role.name}" th:checked="${#lists.contains(getUserById.roles, role)}"/>
             </div>
-
         </th:block>
     </div>
-
-    <br><br>
     <input type="submit" value="Обновить!"/>
 </form>
 

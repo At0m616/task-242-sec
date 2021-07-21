@@ -1,6 +1,7 @@
 package web.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -21,6 +22,7 @@ public class AdminController {
 
     private final RoleService roleService;
 
+
     @Autowired
     public AdminController(UserService userService, RoleService roleService) {
         this.userService = userService;
@@ -35,19 +37,22 @@ public class AdminController {
 
     @GetMapping("/{id}/edit")
     public String editUser(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("getUserById", userService.getUserById(id));
-        model.addAttribute("listRoles", roleService.getAllRoles());
+        User user = userService.getUserById(id);
+        List<Role> roles = roleService.getAllRoles();
+        model.addAttribute("getUserById", user);
+        for(Role r : roles){
+        System.out.println(user.getRoles().contains(r));
+        }
+        model.addAttribute("listRoles", roles );
         return "edit";
     }
 
     @PatchMapping("{id}/edit")
     public String updateUser(@ModelAttribute("user") @Valid User user,
-                             @RequestParam(required = false, name = "roles") Long[] roles,
-                             BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return "redirect:/admin";
-        }
+                             @RequestParam(required = false, name = "roles") Long[] roles) {
+
         Set<Role> roleSet = roleService.findRolesSetById(roles);
+
         user.setRoles(roleSet);
         userService.updateUser(user);
         return "redirect:/admin";
