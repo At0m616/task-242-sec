@@ -17,14 +17,11 @@
     <label for="password">Enter password: </label>
     <input type="text" th:field="*{password}" id="password"/>
     <br>
-    <div>
-        <th:block th:each="role : ${listRoles}">
-            <div>
-                <input type="checkbox" th:value="${role.id}" th:field="*{roles}"
-                       th:text="${role.name}" th:checked="${#lists.contains(getUserById.roles, role)}"/>
-            </div>
-        </th:block>
-    </div>
+    <th:block th:each="role : ${listRoles}">
+
+        <input type="checkbox" th:value="${role.id}" th:id="${role.id}" th:name="roles"
+               th:text="${role.name}" th:checked="${#lists.contains(getUserById.roles, role)}"/>
+    </th:block>
     <input type="submit" value="Обновить!"/>
 </form>
 

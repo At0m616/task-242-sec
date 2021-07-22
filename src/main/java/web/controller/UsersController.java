@@ -12,6 +12,7 @@ import web.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
+import java.util.List;
 import java.util.Set;
 
 
@@ -30,12 +31,12 @@ public class UsersController {
     @GetMapping("/registration")
     public String newUser(Model model) {
         model.addAttribute("user", new User());
+        model.addAttribute("listRoles", roleService.getAllRoles());
         return "registration";
     }
     @PostMapping("/registration")
-    public String createNewUser(@ModelAttribute("user") @Valid User userForm,
-                                @RequestParam(required = false, name = "roles") Long[] role,
-                                BindingResult bindingResult) {
+    public String createNewUser(@ModelAttribute("user") @Valid User userForm, BindingResult bindingResult,
+                                @RequestParam(required = false, name = "roles") Long[] role) {
         if (bindingResult.hasErrors()) {
             return "registration";
         }

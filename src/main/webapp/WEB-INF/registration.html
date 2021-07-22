@@ -11,7 +11,7 @@
     <label for="username" >Enter username: </label>
     <br>
     <input type="text" placeholder="Username" th:field="*{username}" id="username" required/>
-    <h3 th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</h3>
+    <div style="color:darkred" th:if="${#fields.hasErrors('username')}" th:errors="*{username}">username error</div>
     <br>
     <label for="password">Enter password: </label>
     <br>
