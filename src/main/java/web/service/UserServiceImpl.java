@@ -69,6 +69,9 @@ public class UserServiceImpl implements UserService {
         Set<Role> roleSet = roleDao.findRolesSetById(roles);
         modifyUser.setRoles(roleSet);
 
+        if(!user.getUsername().equals(modifyUser.getUsername())){
+            modifyUser.setUsername(user.getUsername());
+        }
         if (!user.getPassword().equals(modifyUser.getPassword())) {
             modifyUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         }
