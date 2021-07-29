@@ -9,7 +9,6 @@ import web.dao.UserDao;
 import web.model.Role;
 import web.model.User;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -31,32 +30,32 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public boolean addUser(User user) {
+    public User addUser(User user, Long[] roles) {
         User userFindDB = userDao.getUserByName(user.getUsername());
 
         if (userFindDB != null) {
-            return false;
+            return userFindDB;
         }
-        Set<Role> roles = new HashSet<>();
-        if (user.getRoles().contains(new Role("ROLE_ADMIN"))) {
-            roles.add(roleDao.findRoleById(1L));
+        if ((roleDao.findRoleById(1L) == null)
+                || (roleDao.findRoleById(2L) == null)) {
+            roleDao.addRoleAdmin();
+            roleDao.addRoleUser();
         }
-        if (user.getRoles().contains(new Role("ROLE_USER"))) {
-        roles.add(roleDao.findRoleById(2L));
-        }
+        Set<Role> role = roleDao.findRolesSetById(roles);
 
+        user.setRoles(role);
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userDao.addUser(user);
-        return true;
+        return user;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User getUserById(long id) {
         return userDao.getUserById(id);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     @Override
     public User getUserByName(String name) {
         return userDao.getUserByName(name);
@@ -64,9 +63,16 @@ public class UserServiceImpl implements UserService {
 
     @Transactional
     @Override
-    public void updateUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        userDao.updateUser(user);
+    public void updateUser(User user, Long[] roles) {
+        User modifyUser = userDao.getUserById(user.getId());
+
+        Set<Role> roleSet = roleDao.findRolesSetById(roles);
+        modifyUser.setRoles(roleSet);
+
+        if (!user.getPassword().equals(modifyUser.getPassword())) {
+            modifyUser.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        }
+        userDao.updateUser(modifyUser);
     }
 
     @Transactional

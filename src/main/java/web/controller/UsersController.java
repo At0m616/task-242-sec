@@ -5,15 +5,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import web.model.Role;
 import web.model.User;
 import web.service.RoleService;
 import web.service.UserService;
 
 import javax.validation.Valid;
 import java.security.Principal;
-import java.util.List;
-import java.util.Set;
 
 
 @Controller
@@ -36,14 +33,13 @@ public class UsersController {
     }
     @PostMapping("/registration")
     public String createNewUser(@ModelAttribute("user") @Valid User userForm, BindingResult bindingResult,
-                                @RequestParam(required = false, name = "roles") Long[] role) {
+                                @RequestParam(required = false, name = "roles") Long[] rolesId) {
         if (bindingResult.hasErrors()) {
             return "registration";
         }
-        Set<Role> roleSet = roleService.findRolesSetById(role);
-        userForm.setRoles(roleSet);
-        userService.addUser(userForm);
-        return "redirect:/";
+
+        userService.addUser(userForm, rolesId);
+        return "redirect:/admin";
     }
 
 

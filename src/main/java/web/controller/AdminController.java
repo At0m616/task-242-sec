@@ -3,6 +3,7 @@ package web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import web.model.Role;
 import web.model.User;
@@ -10,8 +11,8 @@ import web.service.RoleService;
 import web.service.UserService;
 
 import javax.validation.Valid;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,8 +30,27 @@ public class AdminController {
 
     @GetMapping
     public String getAllUsers(Model model) {
-        model.addAttribute("listU", userService.getAllUsers());
+        List<User> userList =userService.getAllUsers();
+        userList.sort(Comparator.comparing(User::getUsername));
+        model.addAttribute("listU", userList);
         return "admin-page";
+    }
+
+    @GetMapping("/new-user")
+    public String newUser(Model model) {
+        model.addAttribute("user", new User());
+        model.addAttribute("listRoles", roleService.getAllRoles());
+        return "registration";
+    }
+    @PostMapping("/new-user")
+    public String createNewUser(@ModelAttribute("user") @Valid User userForm, BindingResult bindingResult,
+                                @RequestParam(required = false, name = "roles") Long[] rolesId) {
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+
+        userService.addUser(userForm, rolesId);
+        return "redirect:/admin";
     }
 
     @GetMapping("/{id}/edit")
@@ -45,14 +65,10 @@ public class AdminController {
         return "edit";
     }
 
-    @PatchMapping("{id}/edit")
+    @PatchMapping("/edit")
     public String updateUser(@ModelAttribute("user") @Valid User user,
                              @RequestParam(required = false, name = "roles") Long[] roles) {
-
-        Set<Role> roleSet = roleService.findRolesSetById(roles);
-
-        user.setRoles(roleSet);
-        userService.updateUser(user);
+        userService.updateUser(user, roles);
         return "redirect:/admin";
     }
 

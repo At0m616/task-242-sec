@@ -20,7 +20,13 @@
         <br><br>
         <input type="submit"/>
     </form>
+    <div th:if="${param.error}">
+        <a style="color:darkred">Invalid username/password</a>
+    </div>
 
+    <div th:if="${param.logout}">
+        <a style="color:darkred">You are logged out</a>
+    </div>
     <br>
     <a th:href="@{/registration}">Registration</a> |
     <a th:href="@{/}">Back to Index</a>

@@ -28,6 +28,9 @@
 
     <input type="submit" value="Create!"/>
 </form>
+<div th:if="${#fields.hasErrors()}">
+    <a style="color:darkred">Invalid username/password</a>
+</div>
 <br>
 <a th:href="@{/}">Back to Index</a>
 <br>
