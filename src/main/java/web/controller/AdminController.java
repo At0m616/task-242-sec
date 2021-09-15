@@ -31,7 +31,6 @@ public class AdminController {
     @GetMapping
     public String getAllUsers(Model model) {
         List<User> userList =userService.getAllUsers();
-        userList.sort(Comparator.comparing(User::getUsername));
         model.addAttribute("listU", userList);
         return "admin-page";
     }
@@ -58,9 +57,6 @@ public class AdminController {
         User user = userService.getUserById(id);
         List<Role> roles = roleService.getAllRoles();
         model.addAttribute("getUserById", user);
-        for(Role r : roles){
-        System.out.println(user.getRoles().contains(r));
-        }
         model.addAttribute("listRoles", roles );
         return "edit";
     }

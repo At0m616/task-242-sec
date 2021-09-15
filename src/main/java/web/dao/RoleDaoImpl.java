@@ -6,9 +6,11 @@ import web.model.Role;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Repository
 public class RoleDaoImpl implements RoleDao {
@@ -35,11 +37,10 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public Set<Role> findRolesSetById(Long[] id) {
-        Set<Role> roleSet = new HashSet<>();
-        for (Long i : id) {
-            roleSet.add(findRoleById(i));
-        }
-        return roleSet;
+        TypedQuery<Role> query = entityManager
+                .createQuery("select r from Role r where  r.id IN :id", Role.class)
+                .setParameter("id", Arrays.asList(id));
+        return query.getResultStream().collect(Collectors.toSet());
     }
 
     @Override
@@ -52,11 +53,10 @@ public class RoleDaoImpl implements RoleDao {
 
     @Override
     public Set<Role> findRoleSetByName(String[] names) {
-        Set<Role> roleSet = new HashSet<>();
-        for (String s : names) {
-            roleSet.add(findRoleByName(s));
-        }
-        return roleSet;
+        TypedQuery<Role> query = entityManager
+                .createQuery("select r from Role r where  r.name IN :names", Role.class)
+                .setParameter("names", Arrays.asList(names));
+        return query.getResultStream().collect(Collectors.toSet());
     }
 
     @Override

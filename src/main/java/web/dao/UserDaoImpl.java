@@ -40,7 +40,7 @@ public class UserDaoImpl implements UserDao {
     @Override
     public List<User> getAllUsers() {
         return entityManager.createQuery
-                ("select distinct u from User u join fetch u.roles", User.class)
+                ("select distinct u from User u join fetch u.roles order by u.username", User.class)
                 .getResultList();
     }
 

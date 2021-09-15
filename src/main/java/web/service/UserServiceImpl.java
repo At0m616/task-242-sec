@@ -9,6 +9,7 @@ import web.dao.UserDao;
 import web.model.Role;
 import web.model.User;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Set;
 
@@ -27,7 +28,18 @@ public class UserServiceImpl implements UserService {
         this.roleDao = roleDao;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
-
+    @PostConstruct
+    public void addRolesIfNotExist() {
+        if ((roleDao.findRoleById(1L) == null)
+                || (roleDao.findRoleById(2L) == null)) {
+            roleDao.addRoleAdmin();
+            roleDao.addRoleUser();
+        }
+        if ((roleDao.findRoleById(1L) != null)
+                || (roleDao.findRoleById(2L) != null)) {
+            System.err.println("Roles exist");
+        }
+    }
     @Transactional
     @Override
     public User addUser(User user, Long[] roles) {
@@ -36,11 +48,7 @@ public class UserServiceImpl implements UserService {
         if (userFindDB != null) {
             return userFindDB;
         }
-        if ((roleDao.findRoleById(1L) == null)
-                || (roleDao.findRoleById(2L) == null)) {
-            roleDao.addRoleAdmin();
-            roleDao.addRoleUser();
-        }
+
         Set<Role> role = roleDao.findRolesSetById(roles);
 
         user.setRoles(role);
